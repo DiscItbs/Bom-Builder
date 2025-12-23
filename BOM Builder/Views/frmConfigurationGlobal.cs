@@ -108,6 +108,7 @@ namespace BOM_Builder.Views
       FillCBFamilia();
       FillCBFamiliaDestino();
       tv_Condicional.ExpandAll();
+      dgvProcessList.SelectionChanged += dgvProcessList_SelectionChanged;
     }
 
     public void ClearDataGrid()
@@ -5479,7 +5480,7 @@ namespace BOM_Builder.Views
       await SaveOrUpdateProccess();
     }
 
-    private async void btnHideProcess_Click(object sender, EventArgs e)
+    private async void btnHideProcess_Click_1(object sender, EventArgs e)
     {
       if (!selectedProccessId.HasValue)
       {
@@ -5518,7 +5519,7 @@ namespace BOM_Builder.Views
       }
     }
 
-    private async void btnDeleteProceso_Click(object sender, EventArgs e)
+    private async void btnDeleteProceso_Click_1(object sender, EventArgs e)
     {
        if (!selectedProccessId.HasValue)
        {
@@ -5628,6 +5629,26 @@ namespace BOM_Builder.Views
     #endregion
 
     private void lblSeleccionSecuencia_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void btnSecuenceProccessRel_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void btnCncelSecuenceProccessRel_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void btnEditSecuenceProccessRel_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void btnDiableSecuenceProccessRel_Click(object sender, EventArgs e)
     {
 
     }

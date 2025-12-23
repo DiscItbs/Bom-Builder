@@ -1831,9 +1831,8 @@ namespace BOM_Builder.Controllers
 
     public bool ValidateProcessInUse(decimal id)
     {
-      // Validar que el id no se este usando en la tabla de NM_Secuencia_Detalle_secuencia
-      // Using Id_Detalle_Secuencia as the likely column name based on convention
-      string query = "SELECT COUNT(*) FROM NM_Secuencia_Detalle_secuencia WHERE Id_Detalle_Secuencia = @id";
+      
+      string query = "SELECT COUNT(*) FROM NM_Secuencia_Detalle_secuencia WHERE Sec_det_id = @id";
       
       using (var conn = new SqlConnection(strConn))
       using (var cmd = conn.CreateCommand())

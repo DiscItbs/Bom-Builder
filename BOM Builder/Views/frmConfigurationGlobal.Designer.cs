@@ -33,6 +33,7 @@
       this.Condicional_Tipo = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.tabPage1 = new System.Windows.Forms.TabPage();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
+      this.dgvListRelaExistentes = new System.Windows.Forms.DataGridView();
       this.btnCncelSecuenceProccessRel = new System.Windows.Forms.Button();
       this.btnSecuenceProccessRel = new System.Windows.Forms.Button();
       this.dgvFamilyRelaList = new System.Windows.Forms.DataGridView();
@@ -362,9 +363,9 @@
       this.lblDescripcionAccesorio = new System.Windows.Forms.Label();
       this.lblNombreMaterial = new System.Windows.Forms.Label();
       this.tbcControlPanel = new System.Windows.Forms.TabControl();
-      this.dgvListRelaExistentes = new System.Windows.Forms.DataGridView();
       this.tabPage1.SuspendLayout();
       this.groupBox5.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dgvListRelaExistentes)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvFamilyRelaList)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvProccessRelaList)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvSecuencesRelaList)).BeginInit();
@@ -420,7 +421,6 @@
       this.gpbTypeMaterial.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dgvListMaterials)).BeginInit();
       this.tbcControlPanel.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.dgvListRelaExistentes)).BeginInit();
       this.SuspendLayout();
       // 
       // Id_Formula
@@ -466,6 +466,14 @@
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Mantenimiento Relación de secuencias vs Procesos";
       // 
+      // dgvListRelaExistentes
+      // 
+      this.dgvListRelaExistentes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.dgvListRelaExistentes.Location = new System.Drawing.Point(6, 446);
+      this.dgvListRelaExistentes.Name = "dgvListRelaExistentes";
+      this.dgvListRelaExistentes.Size = new System.Drawing.Size(237, 258);
+      this.dgvListRelaExistentes.TabIndex = 13;
+      // 
       // btnCncelSecuenceProccessRel
       // 
       this.btnCncelSecuenceProccessRel.Location = new System.Drawing.Point(249, 348);
@@ -474,6 +482,7 @@
       this.btnCncelSecuenceProccessRel.TabIndex = 12;
       this.btnCncelSecuenceProccessRel.Text = "Cancelar";
       this.btnCncelSecuenceProccessRel.UseVisualStyleBackColor = true;
+      this.btnCncelSecuenceProccessRel.Click += new System.EventHandler(this.btnCncelSecuenceProccessRel_Click);
       // 
       // btnSecuenceProccessRel
       // 
@@ -483,6 +492,7 @@
       this.btnSecuenceProccessRel.TabIndex = 11;
       this.btnSecuenceProccessRel.Text = "Relacionar";
       this.btnSecuenceProccessRel.UseVisualStyleBackColor = true;
+      this.btnSecuenceProccessRel.Click += new System.EventHandler(this.btnSecuenceProccessRel_Click);
       // 
       // dgvFamilyRelaList
       // 
@@ -523,6 +533,7 @@
       this.btnDiableSecuenceProccessRel.TabIndex = 5;
       this.btnDiableSecuenceProccessRel.Text = "Desactivar";
       this.btnDiableSecuenceProccessRel.UseVisualStyleBackColor = true;
+      this.btnDiableSecuenceProccessRel.Click += new System.EventHandler(this.btnDiableSecuenceProccessRel_Click);
       // 
       // btnEditSecuenceProccessRel
       // 
@@ -532,6 +543,7 @@
       this.btnEditSecuenceProccessRel.TabIndex = 4;
       this.btnEditSecuenceProccessRel.Text = "Editar";
       this.btnEditSecuenceProccessRel.UseVisualStyleBackColor = true;
+      this.btnEditSecuenceProccessRel.Click += new System.EventHandler(this.btnEditSecuenceProccessRel_Click);
       // 
       // label39
       // 
@@ -605,6 +617,7 @@
       this.btnHideProcess.TabIndex = 9;
       this.btnHideProcess.Text = "Desactivar";
       this.btnHideProcess.UseVisualStyleBackColor = true;
+      this.btnHideProcess.Click += new System.EventHandler(this.btnHideProcess_Click_1);
       // 
       // btnDeleteProceso
       // 
@@ -615,6 +628,7 @@
       this.btnDeleteProceso.TabIndex = 10;
       this.btnDeleteProceso.Text = "Eliminar";
       this.btnDeleteProceso.UseVisualStyleBackColor = true;
+      this.btnDeleteProceso.Click += new System.EventHandler(this.btnDeleteProceso_Click_1);
       // 
       // btnSaveProccess
       // 
@@ -2199,7 +2213,7 @@
       this.dgv_Condicionales.Margin = new System.Windows.Forms.Padding(4);
       this.dgv_Condicionales.MultiSelect = false;
       this.dgv_Condicionales.Name = "dgv_Condicionales";
-      this.dgv_Condicionales.Size = new System.Drawing.Size(1116, 104);
+      this.dgv_Condicionales.Size = new System.Drawing.Size(1116, 97);
       this.dgv_Condicionales.TabIndex = 7;
       // 
       // Id_Condicional
@@ -3926,14 +3940,6 @@
       this.tbcControlPanel.Size = new System.Drawing.Size(1160, 752);
       this.tbcControlPanel.TabIndex = 0;
       // 
-      // dgvListRelaExistentes
-      // 
-      this.dgvListRelaExistentes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dgvListRelaExistentes.Location = new System.Drawing.Point(6, 446);
-      this.dgvListRelaExistentes.Name = "dgvListRelaExistentes";
-      this.dgvListRelaExistentes.Size = new System.Drawing.Size(237, 258);
-      this.dgvListRelaExistentes.TabIndex = 13;
-      // 
       // frmConfigurationGlobal
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -3952,6 +3958,7 @@
       this.tabPage1.ResumeLayout(false);
       this.groupBox5.ResumeLayout(false);
       this.groupBox5.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dgvListRelaExistentes)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvFamilyRelaList)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvProccessRelaList)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvSecuencesRelaList)).EndInit();
@@ -4024,7 +4031,6 @@
       this.gpbTypeMaterial.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dgvListMaterials)).EndInit();
       this.tbcControlPanel.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.dgvListRelaExistentes)).EndInit();
       this.ResumeLayout(false);
 
             }
