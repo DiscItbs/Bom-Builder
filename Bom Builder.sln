@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOM Builder", "BOM Builder\BOM Builder.csproj", "{B4E7818A-077D-467E-B48E-55A39FDA17C9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4E7818A-077D-467E-B48E-55A39FDA17C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E7818A-077D-467E-B48E-55A39FDA17C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E7818A-077D-467E-B48E-55A39FDA17C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E7818A-077D-467E-B48E-55A39FDA17C9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AC8992D1-5892-44C8-BA9B-544BBA6AA8C6}
+	EndGlobalSection
+EndGlobal

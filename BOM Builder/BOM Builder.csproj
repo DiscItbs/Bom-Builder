@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B4E7818A-077D-467E-B48E-55A39FDA17C9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>BOM_Builder</RootNamespace>
+    <AssemblyName>BOM Builder</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\LRangel\source\repos\Publicaciones\NAMM\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>13709B0D3FDDC8E2D763373740192194857554D9</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>BOM Builder_1_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="IQMS.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\IQMS.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="IQMS.WebAPIClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\IQMS.WebAPIClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.JScript" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Simpro.Expr, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Simpro.Expr.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Common, Version=2.7.3.6046, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.9.7.0\lib\net46\Spire.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.3.7.46, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.9.7.0\lib\net46\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=5.7.3.2046, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.9.7.0\lib\net46\Spire.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.XLS, Version=9.7.3.6046, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.9.7.0\lib\net46\Spire.XLS.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BL\GeneratorBomsComponents.cs" />
+    <Compile Include="Controllers\AssemblyBomController.cs" />
+    <Compile Include="Controllers\CondicionalesController.cs" />
+    <Compile Include="Controllers\ConfiguracionController.cs" />
+    <Compile Include="Controllers\EvaluacionFormulasController.cs" />
+    <Compile Include="Controllers\ExprParser.cs" />
+    <Compile Include="Controllers\FormuladorController.cs" />
+    <Compile Include="Controllers\FormulasUtilitiesController.cs" />
+    <Compile Include="Controllers\GeneratorController.cs" />
+    <Compile Include="Controllers\ModeladoBomController.cs" />
+    <Compile Include="Controllers\RejillasController.cs" />
+    <Compile Include="Controllers\ValidadorComponentesController.cs" />
+    <Compile Include="DL\ComponentesDL.cs" />
+    <Compile Include="DL\ConfiguracionDL.cs" />
+    <Compile Include="DL\FormuladorDL.cs" />
+    <Compile Include="DL\GeneratorDL.cs" />
+    <Compile Include="DL\ModeladoDL.cs" />
+    <Compile Include="DL\RejillasDL.cs" />
+    <Compile Include="Helpers\NotNullHelper.cs" />
+    <Compile Include="Models\Arinvt.cs" />
+    <Compile Include="Models\BomForm.cs" />
+    <Compile Include="Models\ConditionalsModel.cs" />
+    <Compile Include="Models\Dtos\FamilysDto.cs" />
+    <Compile Include="Models\Dtos\NMSecuencesDto.cs" />
+    <Compile Include="Models\Dtos\NMSecuenciasDto.cs" />
+    <Compile Include="Models\Dtos\SecuenceDetailDto.cs" />
+    <Compile Include="Models\Dtos\SecuenceDetailSecuence.cs" />
+    <Compile Include="Models\Elemento.cs" />
+    <Compile Include="Models\FormulaVariableModel.cs" />
+    <Compile Include="Models\Fraccion.cs" />
+    <Compile Include="Models\LegacyNewBoms.cs" />
+    <Compile Include="Models\ListasFormulasYCondicionales.cs" />
+    <Compile Include="Models\NM_ModeloL1.cs" />
+    <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\LoadDPModel.cs" />
+    <Compile Include="Models\ModeladoBomModel.cs" />
+    <Compile Include="Models\NM_AleacionModel.cs" />
+    <Compile Include="Models\NM_CondicionalMaster.cs" />
+    <Compile Include="Models\NM_Detalle_Combinacion_Componentes_FormulasModel.cs" />
+    <Compile Include="Models\NM_Formula.cs" />
+    <Compile Include="Models\NM_FormulaMd.cs" />
+    <Compile Include="Models\NM_FormulaQty.cs" />
+    <Compile Include="Models\NM_FormulaTotal.cs" />
+    <Compile Include="Models\NM_MaterialesModel.cs" />
+    <Compile Include="Models\NM_ModelosLModel.cs" />
+    <Compile Include="Models\NM_ModelosModel.cs" />
+    <Compile Include="Models\NM_SubMaterialesModel.cs" />
+    <Compile Include="Models\NM_SubModelosModel.cs" />
+    <Compile Include="Models\NM_Condicional.cs" />
+    <Compile Include="Models\NodoModel.cs" />
+    <Compile Include="Models\Partno.cs" />
+    <Compile Include="Models\Standard.cs" />
+    <Compile Include="Models\UdColsModel.cs" />
+    <Compile Include="Models\WorkCenterModel.cs" />
+    <Compile Include="Controllers\Conexion.cs" />
+    <Compile Include="Controllers\DifusorPerimetralController.cs" />
+    <Compile Include="Controllers\Syst.cs" />
+    <Compile Include="Controllers\SQLServer.cs" />
+    <Compile Include="DL\BomDL.cs" />
+    <Compile Include="DL\DataAccessOracle.cs" />
+    <Compile Include="DL\DataAccessSQL.cs" />
+    <Compile Include="DL\DifusorPerimetralDL.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmBuscarFormulas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmBuscarFormulas.Designer.cs">
+      <DependentUpon>frmBuscarFormulas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmConfigurationGlobal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmConfigurationGlobal.Designer.cs">
+      <DependentUpon>frmConfigurationGlobal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmEditComponentsBom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmEditComponentsBom.Designer.cs">
+      <DependentUpon>frmEditComponentsBom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmEditFormulaBom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmEditFormulaBom.Designer.cs">
+      <DependentUpon>frmEditFormulaBom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmGeneratorBoms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmGeneratorBoms.Designer.cs">
+      <DependentUpon>frmGeneratorBoms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmLegacyNewBoms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmLegacyNewBoms.Designer.cs">
+      <DependentUpon>frmLegacyNewBoms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmMenu.Designer.cs">
+      <DependentUpon>frmMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmLogin.Designer.cs">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Logs\Log.cs" />
+    <Compile Include="Controllers\Main.cs" />
+    <Compile Include="Models\ArinvtModel.cs" />
+    <Compile Include="Models\ComponenteModel.cs" />
+    <Compile Include="Models\NM_AccesorioModel.cs" />
+    <Compile Include="Models\NM_CodigoModel.cs" />
+    <Compile Include="Models\NM_CombinacionesModel.cs" />
+    <Compile Include="Models\NM_ComponentesModel.cs" />
+    <Compile Include="Models\NM_DeflexorModel.cs" />
+    <Compile Include="Models\NM_Detalle_Combinaciones_ComponentesModel.cs" />
+    <Compile Include="Models\NM_EspesorModel.cs" />
+    <Compile Include="Models\NM_MarcoModel.cs" />
+    <Compile Include="Models\NM_SeparadorModel.cs" />
+    <Compile Include="Models\OpMatModel.cs" />
+    <Compile Include="Models\PtoPerModel.cs" />
+    <Compile Include="Models\StandardModel.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controllers\WebAPI.cs" />
+    <Compile Include="Views\frmRemplazoComponentes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmRemplazoComponentes.Designer.cs">
+      <DependentUpon>frmRemplazoComponentes.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Views\frmBuscarFormulas.resx">
+      <DependentUpon>frmBuscarFormulas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmConfigurationGlobal.resx">
+      <DependentUpon>frmConfigurationGlobal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmEditComponentsBom.resx">
+      <DependentUpon>frmEditComponentsBom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmEditFormulaBom.resx">
+      <DependentUpon>frmEditFormulaBom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmGeneratorBoms.resx">
+      <DependentUpon>frmGeneratorBoms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmLegacyNewBoms.resx">
+      <DependentUpon>frmLegacyNewBoms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmLogin.resx">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmMenu.resx">
+      <DependentUpon>frmMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmRemplazoComponentes.resx">
+      <DependentUpon>frmRemplazoComponentes.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="BOM Builder_1_TemporaryKey.pfx" />
+    <None Include="BOM Builder_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\namm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\actualizar.png" />
+    <Content Include="img\add-circle-512.png" />
+    <Content Include="img\blue-delete-button-png-29.png" />
+    <Content Include="img\edit-png-icon-blue-pencil-18.png" />
+    <None Include="img\ver.png" />
+    <None Include="img\eliminar.png" />
+    <Content Include="img\error.png" />
+    <Content Include="img\floppy-save-icon--23.png" />
+    <Content Include="img\N logo.ico" />
+    <Content Include="img\plus.png" />
+    <None Include="img\remplazar.png" />
+    <Content Include="img\save.png" />
+    <Content Include="img\share.png" />
+    <Content Include="img\street.png" />
+    <None Include="Resources\plus1.png" />
+    <None Include="Resources\error.png" />
+    <None Include="Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
