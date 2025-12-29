@@ -2215,7 +2215,7 @@
       this.dgv_Condicionales.Margin = new System.Windows.Forms.Padding(4);
       this.dgv_Condicionales.MultiSelect = false;
       this.dgv_Condicionales.Name = "dgv_Condicionales";
-      this.dgv_Condicionales.Size = new System.Drawing.Size(1116, 76);
+      this.dgv_Condicionales.Size = new System.Drawing.Size(1116, 62);
       this.dgv_Condicionales.TabIndex = 7;
       // 
       // Id_Condicional
@@ -2802,7 +2802,7 @@
       // 
       this.treeView1.Location = new System.Drawing.Point(21, 117);
       this.treeView1.Name = "treeView1";
-      this.treeView1.Size = new System.Drawing.Size(121, 97);
+      this.treeView1.Size = new System.Drawing.Size(457, 273);
       this.treeView1.TabIndex = 66;
       // 
       // btnRemplazarComponente
@@ -3472,6 +3472,7 @@
       this.dgvModeloL1.ReadOnly = true;
       this.dgvModeloL1.Size = new System.Drawing.Size(1115, 202);
       this.dgvModeloL1.TabIndex = 16;
+      this.dgvModeloL1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvModeloL1_CellContentClick);
       // 
       // IdModelo
       // 
@@ -3497,7 +3498,7 @@
       // DescripcionExt
       // 
       this.DescripcionExt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      this.DescripcionExt.HeaderText = "Centro de trabajo";
+      this.DescripcionExt.HeaderText = "Secuencia";
       this.DescripcionExt.Name = "DescripcionExt";
       this.DescripcionExt.ReadOnly = true;
       // 

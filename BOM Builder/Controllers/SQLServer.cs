@@ -560,42 +560,6 @@ namespace BOM_Builder.Controllers
     }
 
 
-    public async Task<Tuple<decimal, decimal, int, string>> GetSequenceProcessRelationById(int id)
-    {
-       using (var conn = new SqlConnection(strConn))
-       using (var cmd = conn.CreateCommand())
-       {
-          cmd.CommandText = @"
-             SELECT Secuencias_id, Sec_det_id, familia_id, BOM_Seq 
-             FROM NM_Secuencia_Detalle_secuencia 
-             WHERE id = @id";
-          cmd.CommandType = CommandType.Text;
-          cmd.Parameters.AddWithValue("@id", id);
-          
-          try
-          {
-             await conn.OpenAsync().ConfigureAwait(false);
-             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
-             {
-                if (await reader.ReadAsync().ConfigureAwait(false))
-                {
-                   var seqId = reader.GetDecimal(reader.GetOrdinal("Secuencias_id"));
-                   var procId = reader.GetDecimal(reader.GetOrdinal("Sec_det_id"));
-                   var famId = reader.GetInt32(reader.GetOrdinal("familia_id"));
-                   var bomSeq = NotNullHelper.NotNullString(reader["BOM_Seq"]).Trim();
-                   
-                   return new Tuple<decimal, decimal, int, string>(seqId, procId, famId, bomSeq);
-                }
-             }
-          }
-          catch (SqlException ex)
-          {
-             throw new Exception("Error obtaining sequence relation by id", ex);
-          }
-       }
-       return null;
-    }
-
     public async Task<bool> UpdateSequenceProcessRelation(int id, decimal sequenceId, decimal processId, int familyId, string sequenceBom)
     {
       using (var conn = new SqlConnection(strConn))
@@ -626,6 +590,42 @@ namespace BOM_Builder.Controllers
           throw new Exception("Error updating sequence process relation", ex);
         }
       }
+    }
+
+    public async Task<Tuple<decimal, decimal, int, string>> GetSequenceProcessRelationById(int id)
+    {
+       using (var conn = new SqlConnection(strConn))
+       using (var cmd = conn.CreateCommand())
+       {
+          cmd.CommandText = @"
+             SELECT Secuencias_id, Sec_det_id, familia_id, BOM_Seq 
+             FROM NM_Secuencia_Detalle_secuencia 
+             WHERE id = @id";
+          cmd.CommandType = CommandType.Text;
+          cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+          
+          try
+          {
+             await conn.OpenAsync().ConfigureAwait(false);
+             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+             {
+                 if (await reader.ReadAsync().ConfigureAwait(false))
+                 {
+                     var sequenceId = reader.GetDecimal(reader.GetOrdinal("Secuencias_id"));
+                     var processId = Convert.ToDecimal(reader["Sec_det_id"]);
+                     var familyId = reader.GetInt32(reader.GetOrdinal("familia_id"));
+                     var bomSeq = reader["BOM_Seq"].ToString();
+                     
+                     return Tuple.Create(sequenceId, processId, familyId, bomSeq);
+                 }
+             }
+          }
+          catch (SqlException ex)
+          {
+             throw new Exception("Error getting sequence process relation by id", ex);
+          }
+       }
+       return null;
     }
 
     public NM_Detalle_Combinaciones_ComponentesModel GetCombinacionComponente(string itemno)

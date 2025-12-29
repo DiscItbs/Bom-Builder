@@ -1109,7 +1109,7 @@ namespace BOM_Builder.Views
               var test = (from desc in centrosDeTrabajo where desc.Mfg_Cell == item.Mfg_Cell select desc).ToList();
             }
             catch (Exception) { }
-            dgvModeloL1.Rows.Add(item.Id_L1, item.Name_Model, item.Description_Model, item.CentroTrabajo);
+            dgvModeloL1.Rows.Add(item.Id_L1, item.Name_Model, item.Description_Model, item.Secuence);
           }
         }
 
@@ -1207,7 +1207,7 @@ namespace BOM_Builder.Views
       }
     }
 
-    private void CmbListModelL1_SelectedIndexChanged(object sender, EventArgs e)
+    private async void CmbListModelL1_SelectedIndexChanged(object sender, EventArgs e)
     {
       List<NM_ModelosLModel> data_list = new List<NM_ModelosLModel>();
       string error = string.Empty;
@@ -5655,8 +5655,7 @@ namespace BOM_Builder.Views
         }
 
         decimal sequenceId = Convert.ToDecimal(dgvSecuencesRelaList.SelectedRows[0].Cells["ID"].Value);
-        decimal processId = Convert.ToDecimal(dgvProccessRelaList.SelectedRows[0].Cells["ID"].Value); // SecuenceDetailDto uses ID which is int but processId in logic is usually decimal? Let's check DTO. It is int. But stored as decimal in NMSecuenciasDto.
-        // dgvProccessRelaList uses SecuenceDetailDto (ID=Int32). SQLServer.InsertSequenceProcessRelation expects decimal processId.
+        decimal processId = Convert.ToDecimal(dgvProccessRelaList.SelectedRows[0].Cells["ID"].Value); 
         int familyId = Convert.ToInt32(dgvFamilyRelaList.SelectedRows[0].Cells["ID"].Value);
         string sequenceBom = txtSecuenceBOM.Text.Trim();
 
@@ -5729,7 +5728,7 @@ namespace BOM_Builder.Views
         // Enable edit mode
         isEditModeRel = true;
         txtSecuenceBOM.Focus();
-        // MessageBox.Show("Modo edición activado. Realice los cambios y presione Guardar (el mismo botón de agregar).", "Edición", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        // MessageBox.Show("Modo edición activado.", "Edición", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private async void dgvListRelaExistentes_SelectionChanged(object sender, EventArgs e)
@@ -5745,7 +5744,6 @@ namespace BOM_Builder.Views
 
              try 
              {
-                 // Fetch details from DB because they are missing in the grid DTO/Columns
                  var details = await sql.GetSequenceProcessRelationById(selectedRelId.Value);
                  
                  if (details != null)
@@ -5834,6 +5832,11 @@ namespace BOM_Builder.Views
              e.Handled = true;
              btnSecuenceProccessRel_Click(sender, e);
         }
+    }
+
+    private void dgvModeloL1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+
     }
   }
 }
