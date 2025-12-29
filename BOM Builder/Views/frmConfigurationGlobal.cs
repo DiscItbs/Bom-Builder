@@ -109,6 +109,10 @@ namespace BOM_Builder.Views
       FillCBFamiliaDestino();
       tv_Condicional.ExpandAll();
       dgvProcessList.SelectionChanged += dgvProcessList_SelectionChanged;
+      dgvListRelaExistentes.SelectionChanged += dgvListRelaExistentes_SelectionChanged;
+      dgvListRelaExistentes.KeyDown += dgvListRelaExistentes_KeyDown;
+      dgvListRelaExistentes.CellDoubleClick += dgvListRelaExistentes_CellDoubleClick;
+      txtSecuenceBOM.KeyPress += txtSecuenceBOM_KeyPress;
     }
 
     public void ClearDataGrid()
@@ -5633,24 +5637,203 @@ namespace BOM_Builder.Views
 
     }
 
-    private void btnSecuenceProccessRel_Click(object sender, EventArgs e)
-    {
+    private int? selectedFamilyId = null;
+    private int? selectedRelId = null;
+    private bool isEditModeRel = false;
 
+    private async void btnSecuenceProccessRel_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        if (dgvSecuencesRelaList.SelectedRows.Count == 0 ||
+            dgvProccessRelaList.SelectedRows.Count == 0 ||
+            dgvFamilyRelaList.SelectedRows.Count == 0 ||
+            string.IsNullOrWhiteSpace(txtSecuenceBOM.Text))
+        {
+           MessageBox.Show("Debe seleccionar una Secuencia, un Proceso, una Familia e ingresar un texto en Secuencia BOM.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+           return;
+        }
+
+        decimal sequenceId = Convert.ToDecimal(dgvSecuencesRelaList.SelectedRows[0].Cells["ID"].Value);
+        decimal processId = Convert.ToDecimal(dgvProccessRelaList.SelectedRows[0].Cells["ID"].Value); // SecuenceDetailDto uses ID which is int but processId in logic is usually decimal? Let's check DTO. It is int. But stored as decimal in NMSecuenciasDto.
+        // dgvProccessRelaList uses SecuenceDetailDto (ID=Int32). SQLServer.InsertSequenceProcessRelation expects decimal processId.
+        int familyId = Convert.ToInt32(dgvFamilyRelaList.SelectedRows[0].Cells["ID"].Value);
+        string sequenceBom = txtSecuenceBOM.Text.Trim();
+
+        // Validation - Check if exists
+        bool exists = await sql.ValidateSequenceProcessRelation(sequenceId, processId, familyId, sequenceBom);
+
+        if (exists && !isEditModeRel)
+        {
+           MessageBox.Show("La combinación ya existe. Utilice la opción de Editar seleccionando el registro en la lista de relaciones existentes.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+           return;
+        }
+
+        bool success = false;
+        if (isEditModeRel)
+        {
+             if (selectedRelId.HasValue)
+             {
+                 success = await sql.UpdateSequenceProcessRelation(selectedRelId.Value, sequenceId, processId, familyId, sequenceBom);
+                 if (success) MessageBox.Show("Relación actualizada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+             }
+        }
+        else
+        {
+             success = await sql.InsertSequenceProcessRelation(sequenceId, processId, familyId, sequenceBom);
+             if (success) MessageBox.Show("Relación guardada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        if (success)
+        {
+           ResetRelForm();
+           LoadDetallesSecuencesDetail(); // Refresh list
+        }
+        else
+        {
+           MessageBox.Show("Error al guardar la relación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+      }
+      catch (Exception ex)
+      {
+         MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
     }
 
     private void btnCncelSecuenceProccessRel_Click(object sender, EventArgs e)
     {
+       ResetRelForm();
+    }
 
+    private void ResetRelForm()
+    {
+       txtSecuenceBOM.Text = string.Empty;
+       dgvSecuencesRelaList.ClearSelection();
+       dgvProccessRelaList.ClearSelection();
+       dgvFamilyRelaList.ClearSelection();
+       
+       isEditModeRel = false;
+       selectedRelId = null;
+       btnEditSecuenceProccessRel.Enabled = false;
     }
 
     private void btnEditSecuenceProccessRel_Click(object sender, EventArgs e)
     {
+        if (!selectedRelId.HasValue) 
+        {
+            MessageBox.Show("Seleccione un registro para editar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        
+        // Enable edit mode
+        isEditModeRel = true;
+        txtSecuenceBOM.Focus();
+        // MessageBox.Show("Modo edición activado. Realice los cambios y presione Guardar (el mismo botón de agregar).", "Edición", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
 
+    private async void dgvListRelaExistentes_SelectionChanged(object sender, EventArgs e)
+    {
+       if (dgvListRelaExistentes.SelectedRows.Count > 0)
+       {
+          var row = dgvListRelaExistentes.SelectedRows[0];
+          
+          if (row.Cells["ID"].Value != null)
+          {
+             selectedRelId = Convert.ToInt32(row.Cells["ID"].Value);
+             btnEditSecuenceProccessRel.Enabled = true;
+
+             try 
+             {
+                 // Fetch details from DB because they are missing in the grid DTO/Columns
+                 var details = await sql.GetSequenceProcessRelationById(selectedRelId.Value);
+                 
+                 if (details != null)
+                 {
+                     SelectRowInGrid(dgvSecuencesRelaList, "ID", details.Item1);
+                     SelectRowInGrid(dgvProccessRelaList, "ID", details.Item2); 
+                     SelectRowInGrid(dgvFamilyRelaList, "ID", details.Item3);
+                     txtSecuenceBOM.Text = details.Item4;
+                 }
+             }
+             catch(Exception ex)
+             {
+                 Console.WriteLine("Error autofilling selection: " + ex.Message);
+             }
+          }
+       }
+       else
+       {
+          selectedRelId = null;
+          btnEditSecuenceProccessRel.Enabled = false;
+       }
+    }
+
+    private void SelectRowInGrid(DataGridView dgv, string columnName, object value)
+    {
+       dgv.ClearSelection();
+       foreach (DataGridViewRow row in dgv.Rows)
+       {
+           if (row.Cells[columnName].Value != null)
+           {
+               // Compare as strings to avoid type issues (decimal vs int)
+               if (row.Cells[columnName].Value.ToString() == value.ToString())
+               {
+                   row.Selected = true;
+                   if (row.Visible) dgv.FirstDisplayedScrollingRowIndex = row.Index;
+                   break;
+               }
+           }
+       }
     }
 
     private void btnDiableSecuenceProccessRel_Click(object sender, EventArgs e)
     {
+      // Optional: Logic to disable/hide relationship? Not explicitly requested but button exists.
+    }
 
+    private void dgvListRelaExistentes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+
+    }
+
+    private void dgvListRelaExistentes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+    {
+        if (e.RowIndex >= 0)
+        {
+             ActivateEditModeRel();
+        }
+    }
+
+    private void ActivateEditModeRel()
+    {
+         if (selectedRelId.HasValue)
+         {
+             isEditModeRel = true;
+             btnEditSecuenceProccessRel.Enabled = true;
+             txtSecuenceBOM.Focus();
+             // MessageBox.Show("Modo edición activado via teclado/mouse.", "Edición", MessageBoxButtons.OK, MessageBoxIcon.Information); 
+             // Commented out message box to make it smoother for shortcuts
+         }
+    }
+
+    private void dgvListRelaExistentes_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Enter)
+        {
+            e.Handled = true; // Use Handled or SuppressKeyPress depending on needs, but Handled usually for KeyPress.
+            e.SuppressKeyPress = true; // Prevents "Ding" sound and default behavior
+            ActivateEditModeRel();
+        }
+    }
+
+    private void txtSecuenceBOM_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        if (e.KeyChar == (char)Keys.Enter)
+        {
+             e.Handled = true;
+             btnSecuenceProccessRel_Click(sender, e);
+        }
     }
   }
 }

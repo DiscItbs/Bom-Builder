@@ -344,8 +344,8 @@ namespace BOM_Builder.Controllers
       using (var cmd = conn.CreateCommand())
       {
         cmd.CommandText = @"
-      SELECT id, Secuencias_id, familia_id
-      FROM NM_Secuencia_Detalle_secuencia";
+          SELECT id, Secuencias_id, familia_id, Sec_det_id, Bom_Seq
+          FROM NM_Secuencia_Detalle_secuencia";
         cmd.CommandType = CommandType.Text;
 
         try
@@ -359,10 +359,11 @@ namespace BOM_Builder.Controllers
               secuencesDetailSecuence.Add(new SecuenceDetailSecuence
               {
                 ID = reader.GetInt32(reader.GetOrdinal("id")),
-                Familia = await GetFamily(reader.GetInt32(reader.GetOrdinal("familia_id"))),
-                Secuencia = await GetSecuence(reader.GetInt32(reader.GetOrdinal("Secuencias_id"))),
-                Proceso = string.Empty,
-                PosBom = string.Empty
+                Secuencia = await GetSequence(reader.GetInt32(reader.GetOrdinal("Secuencias_id"))).ConfigureAwait(false),
+                Familia = await GetFamily(reader.GetInt32(reader.GetOrdinal("familia_id"))).ConfigureAwait(false),
+                Proceso = await GetProceso(reader.GetInt32(reader.GetOrdinal("Sec_det_id"))).ConfigureAwait(false),
+                PosBom = reader.GetInt32(reader.GetOrdinal("Bom_seq")).ToString(),
+                
               });
             }
           }
@@ -373,48 +374,64 @@ namespace BOM_Builder.Controllers
           throw;
         }
       }
-
       return secuencesDetailSecuence;
     }
 
-    public async Task<string> GetFamily(Int32 familyId)
+    private async Task<string> GetFamily(int familyId)
     {
-      string family = string.Empty;
 
+      return await GetStringFromQuery(
+        @"SELECT Nombre_Familia 
+        FROM NM_Familias 
+        WHERE id = @familyId",
+        "@familyId",
+        familyId
+        );
+    }
+
+    private async Task<string> GetSequence(int sequenceId)
+    {
+      return await GetStringFromQuery(
+          @"SELECT Descripcion 
+          FROM NM_Secuencias 
+          WHERE id = @sequenceId",
+          "@sequenceId",
+          sequenceId
+      );
+    }
+
+    private async Task<string> GetProceso(int processId)
+    {
+      return await GetStringFromQuery(
+          @"SELECT Detalle_Secuencias 
+          FROM NM_Detalle_Secuencias 
+          WHERE id = @processId",
+          "@processId",
+          processId
+      );
+    }
+
+    private async Task<string> GetStringFromQuery(
+        string query,
+        string parameterName,
+        int parameterValue)
+    {
       using (var conn = new SqlConnection(strConn))
       using (var cmd = conn.CreateCommand())
       {
-        cmd.CommandText = @"Select Nombre_Familia From NM_Familias where id  = @familyId";
-
+        cmd.CommandText = query;
         cmd.CommandType = CommandType.Text;
-        cmd.Parameters.AddWithValue("@familyId", familyId);
+        cmd.Parameters.Add(parameterName, SqlDbType.Int).Value = parameterValue;
+
         await conn.OpenAsync().ConfigureAwait(false);
 
-        var result = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
-
-        family = NotNullHelper.NotNullString(result);
+        return NotNullHelper.NotNullString(
+            await cmd.ExecuteScalarAsync().ConfigureAwait(false)
+        );
       }
-      return family;
     }
 
-    public async Task<string> GetSecuence(Int32 secuenceId)
-    {
-      string secuence = string.Empty;
 
-      using (var conn = new SqlConnection(strConn))
-      using (var cmd = conn.CreateCommand())
-      {
-        cmd.CommandText = @"Select Detalle_secuencias from NM_Detalle_Secuencias where id = @secuenceId";
-        cmd.CommandType = CommandType.Text;
-        cmd.Parameters.AddWithValue("@secuenceId", secuenceId);
-        await conn.OpenAsync().ConfigureAwait(false);
-
-        var result = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
-
-        secuence = NotNullHelper.NotNullString(result);
-      }
-      return secuence;
-    }
     public async Task<List<SecuenceDetailDto>> GetSecuenceDetails()
     {
       var secuenceDetail = new List<SecuenceDetailDto>();
@@ -446,6 +463,168 @@ namespace BOM_Builder.Controllers
           throw new Exception("Errror trying to get the SecuencesDetail");
         }
         return secuenceDetail;
+      }
+    }
+
+    public async Task<bool> ValidateSequenceProcessRelation(
+    decimal sequenceId,
+    decimal processId,
+    int familyId,
+    string sequenceBom)
+    {
+      if (string.IsNullOrWhiteSpace(sequenceBom))
+        return false;
+
+      const string QUERY = @"
+        SELECT 1
+        FROM NM_Secuencia_Detalle_secuencia
+        WHERE Sec_det_id = @sequenceId
+          AND id = @processId
+          AND familia_id = @familyId
+          AND BOM_Seq = @sequenceBom";
+
+      using (var conn = new SqlConnection(strConn))
+      using (var cmd = new SqlCommand(QUERY, conn))
+      {
+        cmd.Parameters.Add("@sequenceId", SqlDbType.Decimal).Value = sequenceId;
+        cmd.Parameters.Add("@processId", SqlDbType.Decimal).Value = processId;
+        cmd.Parameters.Add("@familyId", SqlDbType.Int).Value = familyId;
+        cmd.Parameters.Add("@sequenceBom", SqlDbType.VarChar, 50)
+                      .Value = sequenceBom.Trim();
+
+        try
+        {
+          await conn.OpenAsync().ConfigureAwait(false);
+          return await cmd.ExecuteScalarAsync().ConfigureAwait(false) != null;
+        }
+        catch (SqlException ex)
+        {
+          throw new Exception(
+              "Error validating sequence-process-family relation",
+              ex);
+        }
+      }
+    }
+
+    public async Task<bool> InsertSequenceProcessRelation(
+    decimal sequenceId,
+    decimal processId,
+    int familyId,
+    string sequenceBom)
+    {
+      if (string.IsNullOrWhiteSpace(sequenceBom))
+        throw new ArgumentException("sequenceBom is required", nameof(sequenceBom));
+
+      const string QUERY = @"
+        INSERT INTO NM_Secuencia_Detalle_secuencia
+        (
+            Secuencias_id,
+            Sec_det_id,
+            familia_id,
+            BOM_Seq,
+            Fecha_Creacion
+        )
+        VALUES
+        (
+            @sequenceId,
+            @processId,
+            @familyId,
+            @sequenceBom,
+            @date
+        )";
+
+      using (var conn = new SqlConnection(strConn))
+      using (var cmd = new SqlCommand(QUERY, conn))
+      {
+        cmd.Parameters.Add("@sequenceId", SqlDbType.Decimal).Value = sequenceId;
+        cmd.Parameters.Add("@processId", SqlDbType.Decimal).Value = processId;
+        cmd.Parameters.Add("@familyId", SqlDbType.Int).Value = familyId;
+        cmd.Parameters.Add("@sequenceBom", SqlDbType.VarChar, 50)
+                      .Value = sequenceBom.Trim();
+        cmd.Parameters.Add("@date", SqlDbType.DateTime)
+                      .Value = DateTime.Now;
+
+        try
+        {
+          await conn.OpenAsync().ConfigureAwait(false);
+          await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+          return true;
+        }
+        catch (SqlException ex)
+        {
+          throw new Exception(
+              "Error inserting sequence-process-family relation",
+              ex);
+        }
+      }
+    }
+
+
+    public async Task<Tuple<decimal, decimal, int, string>> GetSequenceProcessRelationById(int id)
+    {
+       using (var conn = new SqlConnection(strConn))
+       using (var cmd = conn.CreateCommand())
+       {
+          cmd.CommandText = @"
+             SELECT Secuencias_id, Sec_det_id, familia_id, BOM_Seq 
+             FROM NM_Secuencia_Detalle_secuencia 
+             WHERE id = @id";
+          cmd.CommandType = CommandType.Text;
+          cmd.Parameters.AddWithValue("@id", id);
+          
+          try
+          {
+             await conn.OpenAsync().ConfigureAwait(false);
+             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+             {
+                if (await reader.ReadAsync().ConfigureAwait(false))
+                {
+                   var seqId = reader.GetDecimal(reader.GetOrdinal("Secuencias_id"));
+                   var procId = reader.GetDecimal(reader.GetOrdinal("Sec_det_id"));
+                   var famId = reader.GetInt32(reader.GetOrdinal("familia_id"));
+                   var bomSeq = NotNullHelper.NotNullString(reader["BOM_Seq"]).Trim();
+                   
+                   return new Tuple<decimal, decimal, int, string>(seqId, procId, famId, bomSeq);
+                }
+             }
+          }
+          catch (SqlException ex)
+          {
+             throw new Exception("Error obtaining sequence relation by id", ex);
+          }
+       }
+       return null;
+    }
+
+    public async Task<bool> UpdateSequenceProcessRelation(int id, decimal sequenceId, decimal processId, int familyId, string sequenceBom)
+    {
+      using (var conn = new SqlConnection(strConn))
+      using (var cmd = conn.CreateCommand())
+      {
+        cmd.CommandText = @"
+          UPDATE NM_Secuencia_Detalle_secuencia 
+          SET Secuencias_id = @sequenceId, 
+              id_detalle_secuencia = @processId, 
+              familia_id = @familyId, 
+              Secuencia = @sequenceBom
+          WHERE id = @id";
+        
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@sequenceId", sequenceId);
+        cmd.Parameters.AddWithValue("@processId", processId);
+        cmd.Parameters.AddWithValue("@familyId", familyId);
+        cmd.Parameters.AddWithValue("@sequenceBom", sequenceBom);
+
+        try
+        {
+           await conn.OpenAsync().ConfigureAwait(false);
+           await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+           return true;
+        }
+        catch (SqlException ex)
+        {
+          throw new Exception("Error updating sequence process relation", ex);
+        }
       }
     }
 

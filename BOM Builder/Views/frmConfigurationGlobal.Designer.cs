@@ -262,6 +262,7 @@
       this.lblFormula = new System.Windows.Forms.Label();
       this.txt_NombreFormula = new System.Windows.Forms.TextBox();
       this.tbpConstruccionBomComponente = new System.Windows.Forms.TabPage();
+      this.treeView1 = new System.Windows.Forms.TreeView();
       this.btnRemplazarComponente = new System.Windows.Forms.Button();
       this.btnEditarCombinacion = new System.Windows.Forms.Button();
       this.txtFilter = new System.Windows.Forms.TextBox();
@@ -473,6 +474,7 @@
       this.dgvListRelaExistentes.Name = "dgvListRelaExistentes";
       this.dgvListRelaExistentes.Size = new System.Drawing.Size(237, 258);
       this.dgvListRelaExistentes.TabIndex = 13;
+      this.dgvListRelaExistentes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvListRelaExistentes_CellContentClick);
       // 
       // btnCncelSecuenceProccessRel
       // 
@@ -2213,7 +2215,7 @@
       this.dgv_Condicionales.Margin = new System.Windows.Forms.Padding(4);
       this.dgv_Condicionales.MultiSelect = false;
       this.dgv_Condicionales.Name = "dgv_Condicionales";
-      this.dgv_Condicionales.Size = new System.Drawing.Size(1116, 97);
+      this.dgv_Condicionales.Size = new System.Drawing.Size(1116, 76);
       this.dgv_Condicionales.TabIndex = 7;
       // 
       // Id_Condicional
@@ -2771,6 +2773,7 @@
       // 
       // tbpConstruccionBomComponente
       // 
+      this.tbpConstruccionBomComponente.Controls.Add(this.treeView1);
       this.tbpConstruccionBomComponente.Controls.Add(this.btnRemplazarComponente);
       this.tbpConstruccionBomComponente.Controls.Add(this.btnEditarCombinacion);
       this.tbpConstruccionBomComponente.Controls.Add(this.txtFilter);
@@ -2794,6 +2797,13 @@
       this.tbpConstruccionBomComponente.TabIndex = 6;
       this.tbpConstruccionBomComponente.Text = "Construccion bom por componentes";
       this.tbpConstruccionBomComponente.UseVisualStyleBackColor = true;
+      // 
+      // treeView1
+      // 
+      this.treeView1.Location = new System.Drawing.Point(21, 117);
+      this.treeView1.Name = "treeView1";
+      this.treeView1.Size = new System.Drawing.Size(121, 97);
+      this.treeView1.TabIndex = 66;
       // 
       // btnRemplazarComponente
       // 
@@ -2900,10 +2910,10 @@
             this.Description,
             this.Qty,
             this.Apply});
-      this.dgvListComponents.Location = new System.Drawing.Point(19, 237);
+      this.dgvListComponents.Location = new System.Drawing.Point(19, 410);
       this.dgvListComponents.Margin = new System.Windows.Forms.Padding(4);
       this.dgvListComponents.Name = "dgvListComponents";
-      this.dgvListComponents.Size = new System.Drawing.Size(1110, 474);
+      this.dgvListComponents.Size = new System.Drawing.Size(1110, 301);
       this.dgvListComponents.TabIndex = 14;
       // 
       // IdComponent
@@ -2961,7 +2971,7 @@
       this.gpbAgregados.Controls.Add(this.cmbMaterial01);
       this.gpbAgregados.Controls.Add(this.cmbMaterial02);
       this.gpbAgregados.Controls.Add(this.lblMaterial02);
-      this.gpbAgregados.Location = new System.Drawing.Point(21, 85);
+      this.gpbAgregados.Location = new System.Drawing.Point(601, 258);
       this.gpbAgregados.Margin = new System.Windows.Forms.Padding(4);
       this.gpbAgregados.Name = "gpbAgregados";
       this.gpbAgregados.Padding = new System.Windows.Forms.Padding(4);
@@ -4380,5 +4390,6 @@
     private System.Windows.Forms.Button btnCncelSecuenceProccessRel;
     private System.Windows.Forms.Button btnSecuenceProccessRel;
     private System.Windows.Forms.DataGridView dgvListRelaExistentes;
+    private System.Windows.Forms.TreeView treeView1;
   }
 } 

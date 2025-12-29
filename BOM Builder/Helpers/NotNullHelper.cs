@@ -11,7 +11,7 @@ namespace BOM_Builder.Helpers
         return string.Empty;
       }
 
-      var str = value.ToString();
+      var str = value.ToString().Trim();
       return string.IsNullOrWhiteSpace(str) ? string.Empty : str;
     }
   }
