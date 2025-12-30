@@ -64,24 +64,24 @@
   <ItemGroup>
     <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\ExcelDataReader.dll</HintPath>
+      <HintPath>..\lib\ExcelDataReader.dll</HintPath>
     </Reference>
     <Reference Include="IQMS.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\IQMS.Entities.dll</HintPath>
+      <HintPath>..\lib\IQMS.Entities.dll</HintPath>
     </Reference>
     <Reference Include="IQMS.WebAPIClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\IQMS.WebAPIClient.dll</HintPath>
+      <HintPath>..\lib\IQMS.WebAPIClient.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.JScript" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Simpro.Expr, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Simpro.Expr.dll</HintPath>
+      <HintPath>..\lib\Simpro.Expr.dll</HintPath>
     </Reference>
     <Reference Include="Spire.Common, Version=2.7.3.6046, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
       <HintPath>..\packages\Spire.XLS.9.7.0\lib\net46\Spire.Common.dll</HintPath>

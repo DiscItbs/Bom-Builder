@@ -55,9 +55,15 @@ namespace BOM_Builder.Views
       OnLoad();
     }
 
+    private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+    {
+
+    }
+
     private void FrmConfigurationGlobal_Load(object sender, EventArgs e)
     {
       /// Remover el focus del dgv
+      this.ActiveControl = lblListadoBomL0;
       if (dgvModeloL0.RowCount > 0 && dgvModeloL0.ColumnCount > 0)
       {
         dgvModeloL0.CurrentCell = this.dgvModeloL0[0, 0];
@@ -1221,6 +1227,50 @@ namespace BOM_Builder.Views
 
         if (success && id > 0)
         {
+          // Populate TreeView with sequence and processes
+          treeView1.Nodes.Clear();
+          treeView1.Visible = true;
+          
+          try
+          {
+             var result = await sql.GetSequenceAndProcessesForModel(id);
+             string sequenceName = result.Item1;
+             var processes = result.Item2;
+             
+             if (!string.IsNullOrEmpty(sequenceName))
+             {
+                 // Create root node with sequence name
+                 TreeNode rootNode = new TreeNode(sequenceName);
+                 
+                 // Add process nodes
+                  foreach (var proc in processes)
+                  {
+                      TreeNode processNode = new TreeNode(proc.Item1); // Detalle_Secuencias
+                      
+                      // Add "Ensamble Final" as a child node if evident in the row
+                      if (!string.IsNullOrEmpty(proc.Item2) && proc.Item2.Trim() == "Y")
+                      {
+                          processNode.Nodes.Add("Ensamble Final");
+                      }
+                      
+                      rootNode.Nodes.Add(processNode);
+                  }
+                 
+                 treeView1.Nodes.Add(rootNode);
+                 treeView1.ExpandAll(); // Expand to show processes
+             }
+             else
+             {
+                 treeView1.Nodes.Add("No Sequence Found");
+                 treeView1.Visible = true;
+             }
+          }
+          catch (Exception ex)
+          {
+              Console.WriteLine("Error fetching sequence and processes: " + ex.Message);
+              treeView1.Visible = false;
+          }
+
           data_list = configuracion_controller.GetListModelL2WithSubNivel(id, out error);
 
           if (data_list.Count > 1)

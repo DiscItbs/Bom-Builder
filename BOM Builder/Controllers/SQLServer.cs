@@ -668,6 +668,56 @@ namespace BOM_Builder.Controllers
       return componente;
     }
 
+    public async Task<Tuple<string, List<Tuple<string, string>>>> GetSequenceAndProcessesForModel(int modelId)
+    {
+       string sequenceName = string.Empty;
+       var processList = new List<Tuple<string, string>>();
+       
+       using (var conn = new SqlConnection(strConn))
+       using (var cmd = conn.CreateCommand())
+       {
+           cmd.CommandText = @"
+                SELECT T3.Descripcion AS Secuencia, T2.Detalle_Secuencias, T2.Ensamble_Final 
+                FROM NM_ModeloL1 T0
+                LEFT JOIN NM_Secuencias T3 ON T0.Id = T3.id
+                LEFT JOIN NM_Secuencia_Detalle_secuencia T1 ON T3.id = T1.Secuencias_id
+                LEFT JOIN NM_Detalle_Secuencias T2 ON T1.Sec_det_id = T2.id
+                WHERE T0.Id = @modelId
+                ORDER BY T1.Bom_seq ASC";
+           
+           cmd.CommandType = CommandType.Text;
+           cmd.Parameters.Add("@modelId", SqlDbType.Int).Value = modelId;
+
+           try 
+           {
+               await conn.OpenAsync().ConfigureAwait(false);
+               using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+               {
+                   while (await reader.ReadAsync().ConfigureAwait(false))
+                   {
+                       if (string.IsNullOrEmpty(sequenceName))
+                       {
+                           sequenceName = NotNullHelper.NotNullString(reader["Secuencia"]);
+                       }
+                       
+                       string detalle = NotNullHelper.NotNullString(reader["Detalle_Secuencias"]);
+                       string ensambleFinal = NotNullHelper.NotNullString(reader["Ensamble_Final"]);
+                       
+                       if (!string.IsNullOrEmpty(detalle))
+                       {
+                           processList.Add(Tuple.Create(detalle, ensambleFinal));
+                       }
+                   }
+               }
+           }
+           catch (SqlException ex)
+           {
+               throw new Exception("Error getting sequence and processes for model", ex);
+           }
+       }
+       return Tuple.Create(sequenceName, processList);
+    }
+
     public List<NM_Detalle_Combinaciones_ComponentesModel> GetDetalleComponente(string idCombinacion)
     {
       string query = string.Format("SELECT * FROM NM_Detalle_Combinaciones_Componentes WHERE Id_Combinacion = '{0}'", idCombinacion);

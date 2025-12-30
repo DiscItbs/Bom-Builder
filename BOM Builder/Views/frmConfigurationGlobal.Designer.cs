@@ -2215,7 +2215,7 @@
       this.dgv_Condicionales.Margin = new System.Windows.Forms.Padding(4);
       this.dgv_Condicionales.MultiSelect = false;
       this.dgv_Condicionales.Name = "dgv_Condicionales";
-      this.dgv_Condicionales.Size = new System.Drawing.Size(1116, 62);
+      this.dgv_Condicionales.Size = new System.Drawing.Size(1116, 55);
       this.dgv_Condicionales.TabIndex = 7;
       // 
       // Id_Condicional
@@ -2804,6 +2804,7 @@
       this.treeView1.Name = "treeView1";
       this.treeView1.Size = new System.Drawing.Size(457, 273);
       this.treeView1.TabIndex = 66;
+      this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
       // 
       // btnRemplazarComponente
       // 
