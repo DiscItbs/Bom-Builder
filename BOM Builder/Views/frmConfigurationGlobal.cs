@@ -103,6 +103,10 @@ namespace BOM_Builder.Views
       LoadSecuenceDetails();
       LoadFamilys();
       LoadDetallesSecuencesDetail();
+      
+      //!
+      rbnAl.CheckedChanged += Finish_CheckedChanged;
+      rbnAn.CheckedChanged += Finish_CheckedChanged;
     }
 
     private void _Init_()
@@ -1220,6 +1224,8 @@ namespace BOM_Builder.Views
       string code = string.Empty;
       bool success = false;
       int id = 0;
+      //! finish material add
+      string finish_material = string.Empty;
 
       try
       {
@@ -1299,6 +1305,34 @@ namespace BOM_Builder.Views
             txtPreviewCombination.Text = code;
             txtPreviewCombination.Focus();
           }
+
+          // Auto-detect finish from Model L0/L1 text logic applied for both cases
+          string modelL0Text = cmbListModelL0.Text.ToUpper();
+          string modelL1Text = cmbListModelL1.Text.ToUpper();
+
+          if (modelL0Text.Contains("AL") || modelL1Text.Contains("AL"))
+          {
+              finish_material = "AL";
+              rbnAl.Checked = true;
+          }
+          else if (modelL0Text.Contains("AN") || modelL1Text.Contains("AN"))
+          {
+              finish_material = "AN";
+              rbnAn.Checked = true;
+          }
+          else if (modelL0Text.Contains("AC") || modelL1Text.Contains("AC"))
+          {
+             
+          }
+
+          if (!string.IsNullOrEmpty(finish_material))
+          {
+              FillGridListComponents(finish_material);
+          }
+          else
+          {
+              FillGridListComponents(); // Load generic or all
+          }
         }
       }
       catch (Exception ex)
@@ -1306,6 +1340,29 @@ namespace BOM_Builder.Views
         error = ex.Message;
         MessageBox.Show(error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
+    }
+
+    private void Finish_CheckedChanged(object sender, EventArgs e)
+    {
+        RadioButton rbn = sender as RadioButton;
+        if (rbn != null && rbn.Checked)
+        {
+            try 
+            {
+               string finish = "";
+               if (rbn == rbnAl) finish = "AL";
+               else if (rbn == rbnAn) finish = "AN";
+               
+               if (!string.IsNullOrEmpty(finish))
+               {
+                   FillGridListComponents(finish);
+               }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 
     private void BtnBuscarComponetes_Click(object sender, EventArgs e)
